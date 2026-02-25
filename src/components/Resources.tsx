@@ -1,8 +1,38 @@
-import { motion } from "motion/react";
-import { BookOpen, Video, Headphones, Play, ArrowUpRight, Search, Bookmark, BookmarkCheck } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { BookOpen, Video, Headphones, Play, ArrowUpRight, Search, Bookmark, BookmarkCheck, X } from "lucide-react";
 import { useState, useMemo, MouseEvent } from "react";
+import Markdown from "react-markdown";
 
 const resourceList = [
+  {
+    id: "reset-docs",
+    title: "The Reset App Documentation",
+    description: "Complete operational manual for the Reset platform. Learn about protocols, community standards, and the science of the 30-day transformation.",
+    icon: BookOpen,
+    color: "bg-zinc-900 text-white",
+    link: "#",
+    type: "Documentation",
+    duration: "15 min read",
+    details: `
+# The Reset Protocol: Operational Manual
+
+## 1. Overview
+The Reset is a sovereign transformation platform designed for high-performance individuals seeking to reclaim their focus and optimize their physiological and cognitive systems.
+
+## 2. Protocols
+- **Mental Clarity**: 30 days of cognitive fortification.
+- **Physical Power**: Functional strength and metabolic conditioning.
+- **Deep Work**: Mastery of time and energy.
+- **Circadian Reset**: Scientific sleep optimization.
+- **Capital Guard**: Financial discipline and wealth preservation.
+
+## 3. Execution
+Each protocol consists of 30 unique daily directives. Success requires 100% compliance.
+
+## 4. Community
+The Archives and Community feed are synchronized via WebSockets for real-time operational updates.
+    `
+  },
   {
     id: "habit-science",
     title: "The Science of Habits",
@@ -68,6 +98,7 @@ const resourceList = [
 export function Resources() {
   const [searchQuery, setSearchQuery] = useState("");
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [selectedResource, setSelectedResource] = useState<any>(null);
 
   const filteredResources = useMemo(() => {
     return resourceList.filter(resource => 
@@ -82,6 +113,13 @@ export function Resources() {
     setBookmarks(prev => 
       prev.includes(id) ? prev.filter(b => b !== id) : [...prev, id]
     );
+  };
+
+  const handleResourceClick = (resource: any, e: MouseEvent) => {
+    if (resource.details) {
+      e.preventDefault();
+      setSelectedResource(resource);
+    }
   };
 
   return (
@@ -122,6 +160,7 @@ export function Resources() {
               href={resource.link}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => handleResourceClick(resource, e)}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
@@ -169,6 +208,37 @@ export function Resources() {
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedResource && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedResource(null)}
+              className="absolute inset-0 bg-zinc-900/80 backdrop-blur-xl"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative bg-white rounded-[48px] p-10 md:p-16 max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-white/20"
+            >
+              <button
+                onClick={() => setSelectedResource(null)}
+                className="absolute top-8 right-8 p-3 rounded-full hover:bg-zinc-100 transition-colors text-zinc-400"
+              >
+                <X size={32} />
+              </button>
+
+              <div className="markdown-body prose prose-zinc max-w-none">
+                <Markdown>{selectedResource.details}</Markdown>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

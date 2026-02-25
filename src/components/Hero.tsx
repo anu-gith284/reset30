@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { Category } from "../data/challenges";
-import { ArrowRight, Zap, Brain, Dumbbell, Sparkles } from "lucide-react";
+import { ArrowRight, Zap, Brain, Dumbbell, Sparkles, Moon, DollarSign } from "lucide-react";
 
 interface HeroProps {
   onSelect: (category: Category) => void;
@@ -44,43 +44,83 @@ const categories: {
     bg: "bg-amber-50",
     accent: "group-hover:bg-amber-600",
   },
+  {
+    id: "Sleep Improvement",
+    title: "Circadian Reset",
+    description: "Optimize your sleep architecture for maximum recovery and vitality.",
+    icon: Moon,
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
+    accent: "group-hover:bg-indigo-600",
+  },
+  {
+    id: "Money Saving",
+    title: "Capital Guard",
+    description: "Master financial discipline and strategic capital allocation.",
+    icon: DollarSign,
+    color: "text-rose-600",
+    bg: "bg-rose-50",
+    accent: "group-hover:bg-rose-600",
+  },
 ];
 
 export function Hero({ onSelect, userName, activeCategory }: HeroProps) {
+  const handleSelect = (id: Category) => {
+    if (activeCategory && activeCategory !== id) {
+      if (confirm(`You are currently in the ${activeCategory} protocol. Starting the ${id} protocol will reset your current progress. Proceed?`)) {
+        onSelect(id);
+      }
+    } else {
+      onSelect(id);
+    }
+  };
+
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 px-4 overflow-hidden bg-[#fdfdfd]">
+    <div className="relative min-h-screen flex flex-col items-center justify-center pt-32 md:pt-48 pb-20 md:pb-32 px-4 overflow-hidden bg-[#fdfdfd]">
+      {/* Sarvam AI Hard Visible Top Gradient */}
+      <div className="absolute top-0 left-0 w-full h-[400px] md:h-[600px] bg-[radial-gradient(ellipse_at_50%_-10%,#f08a4b_0%,transparent_80%)] opacity-60 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[400px] md:h-[600px] bg-[radial-gradient(ellipse_at_15%_-5%,#0047ab_0%,transparent_70%)] opacity-50 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[400px] md:h-[600px] bg-[radial-gradient(ellipse_at_85%_-5%,#0047ab_0%,transparent_70%)] opacity-50 pointer-events-none" />
+
       {/* Sarvam AI Inspired Background Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-orange/10 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-blue/10 rounded-full blur-[150px] animate-pulse delay-1000" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-orange/20 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-blue/20 rounded-full blur-[150px] animate-pulse delay-1000" />
       
       <div className="relative z-10 max-w-7xl w-full text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-zinc-200 shadow-sm text-zinc-500 text-xs font-black tracking-[0.2em] mb-12 uppercase"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-brand-blue/5 border border-brand-blue/10 text-brand-blue text-[11px] md:text-[13px] font-black tracking-widest mb-4 md:mb-8 uppercase"
         >
-          <Sparkles size={14} className="text-brand-orange" />
-          <span>{userName ? `Hello, ${userName}` : "Sovereign Transformation Platform"}</span>
+          <span>{userName ? `Hello, ${userName}` : "The Sovereign Transformation Protocol"}</span>
+        </motion.div>
+
+        {/* Decorative Flourish SVG */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="mb-4 md:mb-6 flex justify-center opacity-40"
+        >
+          <svg width="160" height="30" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 20C80 20 70 5 50 5C30 5 20 20 0 20" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-zinc-400" />
+            <path d="M100 20C120 20 130 5 150 5C170 5 180 20 200 20" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-zinc-400" />
+            <circle cx="100" cy="20" r="3" fill="currentColor" className="text-zinc-300" />
+          </svg>
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-7xl md:text-[100px] font-serif font-black text-zinc-900 mb-8 tracking-[-0.04em] leading-[0.8] uppercase"
+          className="text-5xl sm:text-7xl md:text-[100px] font-serif font-black text-zinc-900 mb-6 md:mb-8 tracking-[-0.04em] leading-[0.9]"
         >
-          Reclaim <br />
+          Reclaim your <br />
           <span className="relative inline-block">
-            <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 to-zinc-600">
-              Your Focus.
+            <span className="relative z-10 text-zinc-900">
+              focus from within.
             </span>
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 1, delay: 1 }}
-              className="absolute bottom-4 left-0 h-4 bg-brand-orange/20 -z-10 rounded-full"
-            />
           </span>
         </motion.h1>
 
@@ -88,14 +128,14 @@ export function Hero({ onSelect, userName, activeCategory }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl md:text-3xl text-zinc-500 max-w-3xl mx-auto mb-20 font-medium leading-tight tracking-tight"
+          className="text-lg md:text-2xl text-zinc-500 max-w-3xl mx-auto mb-12 md:mb-16 font-medium leading-tight tracking-tight"
         >
           {activeCategory 
             ? `You are currently executing the ${activeCategory} protocol. Continue your transformation below.`
-            : "A curated 30-day journey designed to strip away the noise and rebuild your most essential habits."}
+            : "Built on discipline. Powered by focus. Delivering population-scale impact."}
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-left">
           {categories.map((cat, idx) => {
             const isActive = activeCategory === cat.id;
             return (
@@ -104,24 +144,24 @@ export function Hero({ onSelect, userName, activeCategory }: HeroProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 + idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                onClick={() => onSelect(cat.id)}
-                className={`group relative border p-10 rounded-[48px] shadow-[0_8px_32px_rgba(0,0,0,0.02)] hover:shadow-[0_32px_80px_rgba(0,0,0,0.1)] hover:-translate-y-3 transition-all duration-700 overflow-hidden ${
-                  isActive ? "bg-zinc-900 border-zinc-900" : "bg-white/30 backdrop-blur-2xl border-white/40"
+                onClick={() => handleSelect(cat.id)}
+                className={`group relative border p-8 md:p-12 rounded-[48px] md:rounded-[64px] shadow-[0_8px_32px_rgba(0,0,0,0.02)] hover:shadow-[0_32px_80px_rgba(0,0,0,0.1)] hover:-translate-y-4 transition-all duration-700 overflow-hidden ${
+                  isActive ? "bg-zinc-900 border-zinc-900" : "bg-white/40 backdrop-blur-2xl border-white/60"
                 }`}
               >
-                <div className={`w-16 h-16 ${isActive ? "bg-white/10 text-white" : `${cat.bg} ${cat.color}`} rounded-[24px] flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-sm`}>
-                  <cat.icon size={32} />
+                <div className={`w-16 h-16 md:w-20 md:h-20 ${isActive ? "bg-white/10 text-white" : `${cat.bg} ${cat.color}`} rounded-[24px] md:rounded-[32px] flex items-center justify-center mb-6 md:mb-10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-sm`}>
+                  <cat.icon size={32} className="md:w-10 md:h-10" />
                 </div>
                 
-                <h3 className={`text-3xl font-black mb-4 tracking-tight transition-colors ${isActive ? "text-white" : "text-zinc-900 group-hover:text-zinc-800"}`}>
+                <h3 className={`text-2xl md:text-4xl font-black mb-4 md:mb-6 tracking-tight transition-colors ${isActive ? "text-white" : "text-zinc-900 group-hover:text-zinc-800"}`}>
                   {cat.title}
                 </h3>
                 
-                <p className={`text-lg mb-10 leading-snug font-medium transition-colors ${isActive ? "text-zinc-400" : "text-zinc-500 group-hover:text-zinc-600"}`}>
+                <p className={`text-base md:text-xl mb-8 md:mb-12 leading-snug font-medium transition-colors ${isActive ? "text-zinc-400" : "text-zinc-500 group-hover:text-zinc-600"}`}>
                   {cat.description}
                 </p>
                 
-                <div className={`flex items-center gap-3 text-sm font-black tracking-wider ${isActive ? "text-brand-orange" : "text-zinc-900"}`}>
+                <div className={`flex items-center gap-3 text-base font-black tracking-wider ${isActive ? "text-brand-orange" : "text-zinc-900"}`}>
                   <span className="relative overflow-hidden">
                     <span className="inline-block group-hover:-translate-y-full transition-transform duration-300">
                       {isActive ? "RESUME PROTOCOL" : "START RESET"}
@@ -130,19 +170,16 @@ export function Hero({ onSelect, userName, activeCategory }: HeroProps) {
                       {isActive ? "RESUME PROTOCOL" : "START RESET"}
                     </span>
                   </span>
-                  <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-300" />
+                  <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
 
                 {isActive && (
-                  <div className="absolute top-6 right-6">
-                    <div className="px-3 py-1 bg-brand-orange text-white text-[10px] font-black rounded-full uppercase tracking-widest animate-pulse">
+                  <div className="absolute top-8 right-8">
+                    <div className="px-4 py-1.5 bg-brand-orange text-white text-[11px] font-black rounded-full uppercase tracking-widest animate-pulse">
                       Active
                     </div>
                   </div>
                 )}
-
-                {/* Decorative corner element */}
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/0 to-zinc-900/[0.02] rounded-bl-full transition-opacity opacity-0 group-hover:opacity-100`} />
               </motion.button>
             );
           })}

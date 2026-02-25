@@ -28,7 +28,7 @@ export function Header({
     view: "home" | "dashboard" | "community" | "resources";
   }[] = [
     { label: "HOME", view: "home" },
-    ...(hasChallenge ? [{ label: "PROTOCOL", view: "dashboard" as const }] : []),
+    { label: "PROTOCOLS", view: "home" },
     { label: "COMMUNITY", view: "community" },
     { label: "RESOURCES", view: "resources" },
   ];
@@ -45,54 +45,54 @@ export function Header({
         animate={{ y: 0, opacity: 1 }}
         className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl"
       >
-        <div className="bg-white/80 backdrop-blur-xl border border-zinc-200 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-full px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-8">
+        <div className="glass-header rounded-full px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-12">
             <button
               onClick={() => {
                 handleNavigate("home");
               }}
-              className="font-sans font-black text-2xl tracking-tighter text-brand-blue hover:opacity-80 transition-opacity"
+              className="font-sans font-black text-3xl tracking-tighter text-brand-blue hover:opacity-80 transition-opacity"
             >
               thereset
             </button>
             
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden md:flex items-center gap-10">
               {navItems.map((item) => (
                 <button
-                  key={item.view}
+                  key={item.label}
                   onClick={() => handleNavigate(item.view)}
-                  className={`text-[10px] font-black tracking-[0.2em] transition-all flex items-center gap-1 ${
-                    currentView === item.view ? "text-brand-blue" : "text-zinc-400 hover:text-zinc-900"
+                  className={`text-[11px] font-black tracking-[0.2em] transition-all flex items-center gap-1 uppercase ${
+                    currentView === item.view ? "text-brand-blue" : "text-zinc-600 hover:text-zinc-900"
                   }`}
                 >
                   {item.label}
-                  <ChevronRight size={10} className={currentView === item.view ? "opacity-100" : "opacity-0"} />
+                  <ChevronRight size={12} className={currentView === item.view ? "opacity-100" : "opacity-0"} />
                 </button>
               ))}
             </nav>
           </div>
 
           <div className="flex items-center gap-4">
-            {userName && (
-              <div className="hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-50 border border-zinc-100 text-zinc-500 text-[10px] font-black tracking-widest uppercase">
-                <User size={12} />
-                {userName}
-              </div>
-            )}
-
             <button
               onClick={onOpenSettings}
-              className="p-2 rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-all"
+              className="p-2.5 rounded-full text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition-all"
               title="Settings"
             >
-              <Settings size={20} />
+              <Settings size={22} />
             </button>
 
             <button
-              onClick={() => handleNavigate("home")}
-              className="hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-full bg-zinc-900 text-white text-xs font-black tracking-widest uppercase hover:bg-zinc-800 transition-all shadow-lg shadow-zinc-200"
+              onClick={() => handleNavigate("dashboard")}
+              className="hidden sm:flex items-center gap-2 px-8 py-3.5 rounded-full bg-zinc-900 text-white text-[13px] font-black tracking-widest uppercase hover:bg-zinc-800 transition-all shadow-xl shadow-zinc-900/20"
             >
               Experience Reset
+            </button>
+            
+            <button
+              onClick={() => window.open("https://ai.google.dev/gemini-api/docs/billing", "_blank")}
+              className="hidden lg:flex items-center gap-2 px-8 py-3.5 rounded-full bg-white border border-zinc-200 text-zinc-900 text-[13px] font-black tracking-widest uppercase hover:bg-zinc-50 transition-all shadow-sm"
+            >
+              Documentation
             </button>
             
             {/* Stylish Black Hamburger */}
@@ -129,7 +129,7 @@ export function Header({
             <div className="flex flex-col gap-10 text-center">
               {navItems.map((item) => (
                 <button
-                  key={item.view}
+                  key={item.label}
                   onClick={() => handleNavigate(item.view)}
                   className={`text-5xl font-black tracking-tighter transition-all ${currentView === item.view ? "text-zinc-900 scale-110" : "text-zinc-400 hover:text-zinc-900"}`}
                 >
@@ -153,8 +153,10 @@ export function Header({
               {hasChallenge && currentView === "home" && (
                 <button
                   onClick={() => {
-                    onReset();
-                    setIsMenuOpen(false);
+                    if (confirm("Are you sure you want to reset your progress? This action cannot be undone.")) {
+                      onReset();
+                      setIsMenuOpen(false);
+                    }
                   }}
                   className="px-10 py-5 rounded-full bg-zinc-900 text-white font-black text-xl shadow-2xl"
                 >

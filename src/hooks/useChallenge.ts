@@ -3,6 +3,7 @@ import { Category, challengesData, TaskData } from "../data/challenges";
 
 export interface UserTask extends TaskData {
   completed: boolean;
+  selectedOptionId?: string;
   notes?: string;
   completedAt?: string;
 }
@@ -33,12 +34,12 @@ export function useChallenge() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Ensure tasks have steps (migration for old data)
-        if (parsed.category && parsed.tasks.length > 0 && !parsed.tasks[0].steps) {
+        // Ensure tasks have options (migration for old data)
+        if (parsed.category && parsed.tasks.length > 0 && !parsed.tasks[0].options) {
           const freshTasks = challengesData[parsed.category as Category];
           parsed.tasks = parsed.tasks.map((t: any, i: number) => ({
             ...t,
-            steps: freshTasks[i]?.steps || []
+            options: freshTasks[i]?.options || []
           }));
         }
         return parsed;
@@ -68,13 +69,14 @@ export function useChallenge() {
     });
   };
 
-  const completeTask = (day: number, notes?: string) => {
+  const completeTask = (day: number, optionId: string, notes?: string) => {
     setState((prev) => {
       const newTasks = prev.tasks.map((t) =>
         t.day === day
           ? {
               ...t,
               completed: true,
+              selectedOptionId: optionId,
               notes,
               completedAt: new Date().toISOString(),
             }
